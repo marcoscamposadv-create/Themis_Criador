@@ -1,0 +1,127 @@
+:root {
+  color-scheme: light dark;
+  --cor-fundo: #f5f5f7;
+  --cor-texto: #1c1c1e;
+  --cor-card: #ffffff;
+  --cor-borda: #d9d9de;
+  --cor-destaque: #8a3ffc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #121214;
+    --cor-texto: #f0f0f2;
+    --cor-card: #1c1c1f;
+    --cor-borda: #333338;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  opacity: 0.8;
+  margin-bottom: 2rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--cor-card);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+input, select, button {
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-size: 1rem;
+}
+
+button {
+  background: var(--cor-destaque);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#progresso, #resultado, .erro {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: var(--cor-card);
+  border: 1px solid var(--cor-borda);
+}
+
+.barra {
+  height: 10px;
+  border-radius: 6px;
+  background: var(--cor-fundo);
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+#barra-preenchida {
+  height: 100%;
+  width: 0%;
+  background: var(--cor-destaque);
+  transition: width 0.3s ease;
+}
+
+.downloads {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.downloads a {
+  color: var(--cor-destaque);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.downloads a:hover {
+  text-decoration: underline;
+}
+
+.erro {
+  border-color: #e5484d;
+  color: #e5484d;
+}

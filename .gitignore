@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.env
+
+# Arquivos gerados em tempo de execucao (downloads, audios, legendas, dublagens)
+jobs/
+*.mp4
+*.mp3
+*.wav
+*.srt
+!templates/*

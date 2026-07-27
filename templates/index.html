@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tradutor de Voz do Instagram</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <h1>Tradutor de Voz do Instagram</h1>
+    <p class="subtitulo">
+      Cole o link de um Reels/video publico do Instagram para transcrever, traduzir
+      e gerar uma versao dublada com a fala traduzida.
+    </p>
+
+    <form id="form-traduzir">
+      <label for="url">Link do Instagram</label>
+      <input type="url" id="url" name="url" placeholder="https://www.instagram.com/reel/..." required>
+
+      <label for="idioma_destino">Traduzir para</label>
+      <select id="idioma_destino" name="idioma_destino">
+        {% for codigo, nome in idiomas.items() %}
+          <option value="{{ codigo }}" {% if codigo == 'pt' %}selected{% endif %}>{{ nome }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit">Traduzir</button>
+    </form>
+
+    <section id="progresso" hidden>
+      <p id="etapa-atual">Iniciando...</p>
+      <div class="barra">
+        <div id="barra-preenchida"></div>
+      </div>
+    </section>
+
+    <section id="resultado" hidden>
+      <h2>Resultado</h2>
+      <div>
+        <h3>Transcricao original</h3>
+        <p id="texto-original"></p>
+      </div>
+      <div>
+        <h3>Traducao</h3>
+        <p id="texto-traduzido"></p>
+      </div>
+      <div class="downloads">
+        <a id="link-legenda-original" download>Baixar legenda original (.srt)</a>
+        <a id="link-legenda-traduzida" download>Baixar legenda traduzida (.srt)</a>
+        <a id="link-audio-dublado" download>Baixar audio dublado (.mp3)</a>
+        <a id="link-video-dublado" download>Baixar video dublado (.mp4)</a>
+      </div>
+    </section>
+
+    <section id="erro" class="erro" hidden></section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
