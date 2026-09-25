@@ -2,6 +2,6 @@
   "name": "themis-criador",
   "private": true,
   "scripts": {
-    "test": "node --test guarda-compartilhada/"
+    "test": "node --test guarda-compartilhada/*.test.js"
   }
 }
