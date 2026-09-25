@@ -164,3 +164,26 @@ test('minuta de cada regime não contém valores indefinidos', () => {
     assert.doesNotMatch(texto, /undefined|NaN/, regime);
   });
 });
+
+test('minuta usa contrações corretas ("dos filhos", "da criança")', () => {
+  const uma = M.gerarMinuta({ ano: 2027, criancas: [{ nome: 'Laura', nascimento: '2019-03-14' }] });
+  const duas = M.gerarMinuta({ ano: 2027, criancas: [{ nome: 'Laura' }, { nome: 'Pedro' }] });
+  const nenhuma = M.gerarMinuta({ ano: 2027 });
+  for (const t of [uma, duas, nenhuma]) {
+    assert.doesNotMatch(t, /\b(de|a) (os filhos|a criança|a\(s\) criança\(s\))/);
+  }
+  assert.match(uma, /A guarda da criança/);
+  assert.match(duas, /A guarda dos filhos/);
+  assert.match(duas, /relativos aos filhos/);
+  assert.match(uma, /relativos à criança/);
+  assert.match(nenhuma, /A guarda da\(s\) criança\(s\)/);
+});
+
+test('minuta concorda os verbos com o número de filhos', () => {
+  const uma = M.gerarMinuta({ ano: 2027, criancas: [{ nome: 'Laura' }] });
+  const duas = M.gerarMinuta({ ano: 2027, criancas: [{ nome: 'Laura' }, { nome: 'Pedro' }] });
+  assert.match(uma, /\nA criança residirá com .* e conviverá com /);
+  assert.match(duas, /\nOs filhos residirão com .* e conviverão com /);
+  assert.match(duas, /os filhos pernoitarão com o aniversariante/);
+  assert.doesNotMatch(uma + duas, /\(ão\)/);
+});

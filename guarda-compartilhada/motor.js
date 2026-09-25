@@ -296,14 +296,14 @@
 
   function papelTexto(p) { return p === 'mae' ? 'genitora' : p === 'pai' ? 'genitor' : 'genitor(a)'; }
 
-  function descreverRegime(c, nomes, filhos) {
+  function descreverRegime(c, nomes, filhos, Filhos, fut) {
     var ancora = parseISO(c.dataInicio);
     var ini = nomes[c.iniciaCom], oIni = nomes[outro(c.iniciaCom)];
     switch (c.regime) {
       case 'fins_de_semana_alternados': {
         var base = nomes[c.residenciaBase], vis = nomes[outro(c.residenciaBase)];
         var primeiraSexta = ancora + mod(5 - diaSemana(ancora), 7);
-        var t = filhos + ' residirá(ão) com ' + base + ' e conviverá(ão) com ' + vis +
+        var t = Filhos + ' ' + fut('residirá') + ' com ' + base + ' e ' + fut('conviverá') + ' com ' + vis +
           ' em fins de semana alternados, de sexta-feira, às ' + c.horarioTroca + ', até domingo, às ' + c.horarioRetorno +
           ', iniciando-se o revezamento no fim de semana de ' + br(primeiraSexta) + ', que caberá a ' + vis + '.';
         if (c.pernoiteMeioSemana !== null && c.pernoiteMeioSemana !== undefined && c.pernoiteMeioSemana !== '') {
@@ -338,6 +338,12 @@
       ? (plural ? 'os filhos' : 'a criança')
       : 'a(s) criança(s)';
     var Filhos = filhos.charAt(0).toUpperCase() + filhos.slice(1);
+    // Contrações: "de" + "os filhos" = "dos filhos"; "a" + "a criança" = "à criança".
+    var deFilhos = filhos.replace(/^os /, 'dos ').replace(/^a\(s\) /, 'da(s) ').replace(/^a /, 'da ');
+    var aFilhos = filhos.replace(/^os /, 'aos ').replace(/^a\(s\) /, 'à(s) ').replace(/^a /, 'à ');
+    // Futuro concordando com o número de filhos: "residirá" / "residirão" / "residirá(ão)".
+    function fut(v) { return plural ? v.slice(0, -1) + 'ão' : c.criancas.length ? v : v + '(ão)'; }
+    var pronome = plural ? 'eles' : c.criancas.length ? 'ela' : 'ela(s)';
     var st = estatisticas(gerarCalendario(c, c.ano));
 
     var clausulas = [];
@@ -348,18 +354,18 @@
       : '[nome e data de nascimento das crianças]';
 
     cl('Da guarda compartilhada',
-      'A guarda de ' + filhos + ' será exercida de forma compartilhada, com responsabilização conjunta e exercício de direitos e deveres ' +
+      'A guarda ' + deFilhos + ' será exercida de forma compartilhada, com responsabilização conjunta e exercício de direitos e deveres ' +
       'pelos genitores concernentes ao poder familiar (art. 1.583, § 1º, e art. 1.634 do Código Civil). As decisões relevantes, ' +
       'como escolha e mudança de escola, tratamentos de saúde não emergenciais, atividades extracurriculares, orientação religiosa, ' +
       'viagens internacionais e mudança de domicílio, serão tomadas em conjunto.');
 
     cl('Da base de moradia',
-      'Fica fixada a cidade de ' + (c.cidadeBase || '[cidade]') + ' como base de moradia de ' + filhos + ' (art. 1.583, § 3º, do Código Civil), ' +
+      'Fica fixada a cidade de ' + (c.cidadeBase || '[cidade]') + ' como base de moradia ' + deFilhos + ' (art. 1.583, § 3º, do Código Civil), ' +
       'e a residência de ' + nomes[c.residenciaBase] + ' como lar de referência para fins de endereço escolar e cadastral, ' +
       'sem prejuízo da divisão equilibrada do tempo de convívio (art. 1.583, § 2º).');
 
     cl('Do regime ordinário de convivência',
-      descreverRegime(c, nomes, filhos) + ' Em projeção para o ano de ' + c.ano + ', o regime, somado às datas especiais e às férias, resulta em ' +
+      descreverRegime(c, nomes, filhos, Filhos, fut) + ' Em projeção para o ano de ' + c.ano + ', o regime, somado às datas especiais e às férias, resulta em ' +
       st.A.noites + ' pernoites (' + st.A.percentual.toString().replace('.', ',') + '%) com ' + nomes.A + ' e ' +
       st.B.noites + ' pernoites (' + st.B.percentual.toString().replace('.', ',') + '%) com ' + nomes.B + '.');
 
@@ -387,9 +393,9 @@
       }
     });
     if (d.aniversarioGenitores) {
-      especiais.push('Aniversário de cada genitor: ' + filhos + ' pernoitará(ão) com o aniversariante');
+      especiais.push('Aniversário de cada genitor: ' + filhos + ' ' + fut('pernoitará') + ' com o aniversariante');
     }
-    especiais.push('Aniversário de ' + filhos + ': o genitor que não estiver com ' + filhos + ' na data poderá com ela(s) conviver por, no mínimo, 3 (três) horas, em horário a ser combinado');
+    especiais.push('Aniversário ' + deFilhos + ': o genitor que não estiver com ' + filhos + ' na data poderá com ' + pronome + ' conviver por, no mínimo, 3 (três) horas, em horário a ser combinado');
     cl('Das datas especiais',
       'Independentemente do regime ordinário, observar-se-á:\n' + especiais.map(function (e, i) { return '  ' + String.fromCharCode(97 + i) + ') ' + e + ';'; }).join('\n'));
 
@@ -406,12 +412,12 @@
       'retoma-se o regime ordinário no ponto em que estiver, sem compensação de dias.');
 
     cl('Da comunicação',
-      'Os genitores utilizarão ' + c.comunicacao.canal + ' como canal preferencial para assuntos relativos a ' + filhos +
+      'Os genitores utilizarão ' + c.comunicacao.canal + ' como canal preferencial para assuntos relativos ' + aFilhos +
       ', respondendo em até 48 (quarenta e oito) horas, salvo urgência, que será comunicada de imediato. O genitor que não estiver com ' + filhos +
       ' terá assegurado contato por chamada de vídeo ou telefone ' + c.comunicacao.videochamada + '.');
 
     cl('Das informações escolares e de saúde',
-      'Ambos os genitores têm direito de acesso direto às informações escolares, médicas e psicológicas de ' + filhos +
+      'Ambos os genitores têm direito de acesso direto às informações escolares, médicas e psicológicas ' + deFilhos +
       ' (art. 1.584, § 6º, do Código Civil), devendo manter-se mutuamente informados sobre reuniões, consultas e ocorrências relevantes.');
 
     cl('Das viagens',
@@ -434,7 +440,7 @@
       ' e a não praticar qualquer ato de alienação parental, nos termos da Lei nº 12.318/2010.');
 
     cl('Da revisão',
-      'Este plano poderá ser revisto a qualquer tempo, por acordo ou judicialmente, conforme a idade e as necessidades de ' + filhos +
+      'Este plano poderá ser revisto a qualquer tempo, por acordo ou judicialmente, conforme a idade e as necessidades ' + deFilhos +
       '. Antes de recorrer ao Judiciário, os genitores buscarão a mediação.');
 
     var linhas = [];
