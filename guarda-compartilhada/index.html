@@ -1,0 +1,542 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plano de Guarda Compartilhada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+  :root {
+    --chao: #f1f4f3;
+    --superficie: #ffffff;
+    --tinta: #1c2326;
+    --suave: #5b676b;
+    --linha: #d6dedc;
+    --a: #2e6f8e;
+    --a-claro: #d7e7ef;
+    --b: #b8741f;
+    --b-claro: #f4e3cb;
+    --foco: #2e6f8e;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --chao: #131a1c;
+      --superficie: #1b2427;
+      --tinta: #e4ebe9;
+      --suave: #98a5a7;
+      --linha: #2d3a3d;
+      --a: #6aaccc;
+      --a-claro: #1f3b48;
+      --b: #e0a457;
+      --b-claro: #4a3519;
+      --foco: #6aaccc;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --chao: #131a1c;
+    --superficie: #1b2427;
+    --tinta: #e4ebe9;
+    --suave: #98a5a7;
+    --linha: #2d3a3d;
+    --a: #6aaccc;
+    --a-claro: #1f3b48;
+    --b: #e0a457;
+    --b-claro: #4a3519;
+    --foco: #6aaccc;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: var(--chao);
+    color: var(--tinta);
+    font: 14px/1.5 var(--sans);
+    padding-inline: 16px;
+    padding-block: 24px 48px;
+  }
+  .pagina { max-width: 1320px; margin: 0 auto; display: grid; gap: 24px; }
+
+  header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+  h1 { font: 600 26px/1.2 var(--serif); margin: 0; text-wrap: balance; }
+  header p { margin: 4px 0 0; color: var(--suave); max-width: 62ch; }
+  .selo { font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--suave);
+          border: 1px solid var(--linha); border-radius: 4px; padding: 6px 8px; }
+
+  .layout { display: grid; grid-template-columns: minmax(300px, 360px) minmax(0, 1fr); gap: 24px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ---------- formulário ---------- */
+  form { background: var(--superficie); border: 1px solid var(--linha); border-radius: 8px; padding: 4px 16px 16px; }
+  fieldset { border: 0; border-top: 1px solid var(--linha); margin: 0; padding: 14px 0 4px; display: grid; gap: 10px; }
+  fieldset:first-child { border-top: 0; }
+  legend { font: 600 11px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--suave); padding: 0; margin-bottom: 4px; float: left; width: 100%; }
+  legend + * { clear: both; }
+  label { display: grid; gap: 4px; font-size: 13px; color: var(--suave); }
+  .linha2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .linha2 > label { min-width: 0; }
+  input, select, textarea {
+    font: 14px/1.4 var(--sans); color: var(--tinta); background: var(--chao);
+    border: 1px solid var(--linha); border-radius: 6px; padding: 7px 9px; width: 100%; min-width: 0;
+  }
+  textarea { resize: vertical; min-height: 58px; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, .dia:focus-visible {
+    outline: 2px solid var(--foco); outline-offset: 1px;
+  }
+  .check { display: flex; align-items: center; gap: 8px; color: var(--tinta); font-size: 14px; }
+  .check input { width: auto; margin: 0; accent-color: var(--a); }
+  .dica { font-size: 12px; color: var(--suave); margin: 0; }
+  .cor-a { color: var(--a); font-weight: 600; }
+  .cor-b { color: var(--b); font-weight: 600; }
+
+  /* ---------- resumo ---------- */
+  main { display: grid; gap: 16px; min-width: 0; }
+  .resumo { background: var(--superficie); border: 1px solid var(--linha); border-radius: 8px; padding: 16px; display: grid; gap: 12px; }
+  .resumo-topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; }
+  .resumo h2 { font: 600 18px/1.3 var(--serif); margin: 0; }
+  .ano-nav { display: flex; align-items: center; gap: 6px; font: 500 15px/1 var(--mono); }
+  .ano-nav button { width: 30px; height: 30px; padding: 0; }
+  .barra { display: flex; height: 14px; border-radius: 3px; overflow: hidden; background: var(--linha); }
+  .barra span { display: block; height: 100%; transition: width .25s ease; }
+  .barra .a { background: var(--a); }
+  .barra .b { background: var(--b); }
+  .numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px 16px; }
+  .numero { display: grid; gap: 2px; }
+  .numero .rot { font-size: 12px; color: var(--suave); }
+  .numero .val { font: 500 20px/1.2 var(--mono); font-variant-numeric: tabular-nums; }
+  .numero .val small { font-size: 12px; color: var(--suave); font-weight: 400; }
+
+  /* ---------- abas ---------- */
+  .abas { display: flex; gap: 4px; border-bottom: 1px solid var(--linha); }
+  .abas button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: 8px 12px; color: var(--suave); font-weight: 500; }
+  .abas button[aria-selected="true"] { color: var(--tinta); border-bottom-color: var(--tinta); }
+
+  button { font: 500 13px/1 var(--sans); color: var(--tinta); background: var(--superficie); border: 1px solid var(--linha); border-radius: 6px; padding: 8px 12px; cursor: pointer; }
+  button:hover { border-color: var(--suave); }
+
+  /* ---------- calendário ---------- */
+  .legenda { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--suave); align-items: center; }
+  .legenda i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+  .legenda .la { background: var(--a); }
+  .legenda .lb { background: var(--b); }
+  .legenda .le { background: transparent; box-shadow: inset 0 0 0 2px var(--tinta); }
+  .legenda .lc { width: 6px; height: 6px; border-radius: 50%; background: var(--tinta); margin-inline: 3px 9px; }
+  .meses { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 14px; }
+  .mes { background: var(--superficie); border: 1px solid var(--linha); border-radius: 8px; padding: 12px; }
+  .mes h3 { font: 600 14px/1 var(--sans); margin: 0 0 10px; text-transform: capitalize; display: flex; justify-content: space-between; }
+  .mes h3 small { font: 400 11px/1 var(--mono); color: var(--suave); text-transform: none; }
+  .grade { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .grade .cab { font: 500 10px/1 var(--mono); color: var(--suave); text-align: center; padding-bottom: 4px; }
+  .dia {
+    position: relative; aspect-ratio: 1; max-width: 100%; border-radius: 4px; border: 0; padding: 0;
+    font: 500 11px/1 var(--mono); font-variant-numeric: tabular-nums; display: grid; place-items: center; cursor: pointer;
+  }
+  .dia.A { background: var(--a-claro); color: var(--tinta); }
+  .dia.B { background: var(--b-claro); color: var(--tinta); }
+  .dia.A.especial { background: var(--a); color: #fff; }
+  .dia.B.especial { background: var(--b); color: #1b1305; }
+  .dia.troca::before { content: ""; position: absolute; left: 2px; top: 2px; bottom: 2px; width: 2px; border-radius: 1px; background: var(--tinta); opacity: .35; }
+  .dia.aniv::after { content: ""; position: absolute; right: 3px; top: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--tinta); }
+  .dia.sel { outline: 2px solid var(--tinta); outline-offset: 1px; }
+  .detalhe { min-height: 22px; font-size: 13px; }
+  .detalhe strong { font-weight: 600; }
+
+  /* ---------- minuta ---------- */
+  .minuta-acoes { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+  .aviso { font-size: 12px; color: var(--suave); margin: 0; max-width: 70ch; }
+  .minuta {
+    background: var(--superficie); border: 1px solid var(--linha); border-radius: 8px; padding: 28px clamp(16px, 4vw, 48px);
+    font: 16px/1.65 var(--serif); white-space: pre-wrap; max-width: 78ch; margin: 0; overflow-wrap: anywhere;
+  }
+  .toast { font-size: 13px; color: var(--a); }
+
+  @media (prefers-reduced-motion: reduce) { .barra span { transition: none; } }
+</style>
+
+<div class="pagina">
+  <header>
+    <div>
+      <h1>Plano de Guarda Compartilhada</h1>
+      <p>Defina o regime de convivência, as datas especiais e as férias. O calendário do ano e a minuta do plano são gerados na hora, conforme os arts. 1.583 e 1.584 do Código Civil.</p>
+    </div>
+    <span class="selo" id="selo-exemplo">Preenchido com dados de exemplo</span>
+  </header>
+
+  <div class="layout">
+    <form id="form" autocomplete="off">
+      <fieldset>
+        <legend>Genitores</legend>
+        <div class="linha2">
+          <label><span class="cor-a">Genitor(a) A</span><input id="a-nome" value="Ana Souza"></label>
+          <label>Papel
+            <select id="a-papel"><option value="mae">Mãe</option><option value="pai">Pai</option><option value="outro">Outro</option></select>
+          </label>
+        </div>
+        <div class="linha2">
+          <label><span class="cor-b">Genitor(a) B</span><input id="b-nome" value="Bruno Lima"></label>
+          <label>Papel
+            <select id="b-papel"><option value="mae">Mãe</option><option value="pai" selected>Pai</option><option value="outro">Outro</option></select>
+          </label>
+        </div>
+        <div class="linha2">
+          <label>Nascimento de A<input id="a-nasc" type="date" value="1988-06-12"></label>
+          <label>Nascimento de B<input id="b-nasc" type="date" value="1986-10-03"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Filhos</legend>
+        <label>Um por linha: nome; data de nascimento
+          <textarea id="criancas" rows="2">Laura Souza Lima; 14/03/2019
+Pedro Souza Lima; 22/09/2022</textarea>
+        </label>
+        <div class="linha2">
+          <label>Cidade base de moradia<input id="cidade" value="Belo Horizonte"></label>
+          <label>Lar de referência
+            <select id="residencia"><option value="A">Genitor(a) A</option><option value="B">Genitor(a) B</option></select>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Regime ordinário</legend>
+        <label>Modelo de convivência
+          <select id="regime">
+            <option value="fins_de_semana_alternados">Fins de semana alternados</option>
+            <option value="semanas_alternadas">Semanas alternadas</option>
+            <option value="2-2-5-5">2-2-5-5 (dias fixos, fins de semana alternados)</option>
+            <option value="2-2-3">2-2-3 (alterna a cada semana)</option>
+          </select>
+        </label>
+        <div class="linha2">
+          <label>Início do revezamento<input id="inicio" type="date"></label>
+          <label id="lbl-inicia">Começa com
+            <select id="inicia"><option value="A">Genitor(a) A</option><option value="B">Genitor(a) B</option></select>
+          </label>
+        </div>
+        <label id="lbl-meio">Pernoite no meio da semana (visitante)
+          <select id="meio">
+            <option value="">Nenhum</option><option value="1">Segunda-feira</option><option value="2">Terça-feira</option>
+            <option value="3" selected>Quarta-feira</option><option value="4">Quinta-feira</option>
+          </select>
+        </label>
+        <label id="lbl-troca" hidden>Dia da troca semanal
+          <select id="troca">
+            <option value="1">Segunda-feira</option><option value="5" selected>Sexta-feira</option><option value="0">Domingo</option>
+          </select>
+        </label>
+        <div class="linha2">
+          <label>Horário da troca<input id="h-troca" value="18h"></label>
+          <label>Horário de retorno<input id="h-retorno" value="18h"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Datas especiais</legend>
+        <div class="linha2">
+          <label class="check"><input type="checkbox" id="natal" checked>Natal e Réveillon</label>
+          <label>Natal em anos pares<select id="natal-par"><option value="A">com A</option><option value="B">com B</option></select></label>
+        </div>
+        <div class="linha2">
+          <label class="check"><input type="checkbox" id="carnaval" checked>Carnaval</label>
+          <label>Em anos pares<select id="carnaval-par"><option value="A">com A</option><option value="B">com B</option></select></label>
+        </div>
+        <div class="linha2">
+          <label class="check"><input type="checkbox" id="pascoa" checked>Páscoa</label>
+          <label>Em anos pares<select id="pascoa-par"><option value="A">com A</option><option value="B" selected>com B</option></select></label>
+        </div>
+        <label class="check"><input type="checkbox" id="maes" checked>Dia das Mães com a mãe</label>
+        <label class="check"><input type="checkbox" id="pais" checked>Dia dos Pais com o pai</label>
+        <label class="check"><input type="checkbox" id="aniv" checked>Aniversário de cada genitor com o aniversariante</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Férias escolares</legend>
+        <label class="check"><input type="checkbox" id="ferias" checked>Dividir as férias em metades</label>
+        <div class="linha2">
+          <label>Verão: início<input id="f1-ini" value="02/01" placeholder="dd/mm"></label>
+          <label>Verão: fim<input id="f1-fim" value="31/01" placeholder="dd/mm"></label>
+        </div>
+        <div class="linha2">
+          <label>Julho: início<input id="f2-ini" value="01/07" placeholder="dd/mm"></label>
+          <label>Julho: fim<input id="f2-fim" value="31/07" placeholder="dd/mm"></label>
+        </div>
+        <label>1ª metade em anos pares<select id="ferias-par"><option value="A">com A</option><option value="B">com B</option></select></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Convivência à distância e avisos</legend>
+        <label>Canal de comunicação<input id="canal" value="aplicativo de mensagens"></label>
+        <label>Chamada de vídeo<input id="video" value="diariamente, entre 19h e 20h"></label>
+        <div class="linha2">
+          <label>Aviso de viagem (dias)<input id="aviso-viagem" type="number" min="1" value="15"></label>
+          <label>Aviso de mudança (dias)<input id="aviso-mudanca" type="number" min="1" value="60"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Alimentos</legend>
+        <label class="check"><input type="checkbox" id="alimentos">Incluir cláusula de alimentos</label>
+        <div class="linha2">
+          <label>Quem paga<select id="devedor"><option value="A">Genitor(a) A</option><option value="B" selected>Genitor(a) B</option></select></label>
+          <label>Vencimento (dia)<input id="vencimento" type="number" min="1" max="31" value="10"></label>
+        </div>
+        <label>Valor<input id="valor" value="30% (trinta por cento) do salário mínimo"></label>
+      </fieldset>
+    </form>
+
+    <main>
+      <section class="resumo" aria-live="polite">
+        <div class="resumo-topo">
+          <h2 id="resumo-titulo">Distribuição de pernoites</h2>
+          <div class="ano-nav">
+            <button type="button" id="ano-menos" aria-label="Ano anterior">‹</button>
+            <span id="ano"></span>
+            <button type="button" id="ano-mais" aria-label="Próximo ano">›</button>
+          </div>
+        </div>
+        <div class="barra" aria-hidden="true"><span class="a" id="barra-a"></span><span class="b" id="barra-b"></span></div>
+        <div class="numeros" id="numeros"></div>
+      </section>
+
+      <div class="abas" role="tablist">
+        <button type="button" role="tab" id="tab-cal" aria-selected="true" aria-controls="painel-cal">Calendário</button>
+        <button type="button" role="tab" id="tab-min" aria-selected="false" aria-controls="painel-min">Minuta do plano</button>
+      </div>
+
+      <section id="painel-cal" role="tabpanel" aria-labelledby="tab-cal" style="display:grid; gap:12px">
+        <div class="legenda">
+          <span><i class="la"></i><span id="leg-a">A</span></span>
+          <span><i class="lb"></i><span id="leg-b">B</span></span>
+          <span><i class="le"></i>Data especial ou férias (cor forte)</span>
+          <span><i class="lc"></i>Aniversário dos filhos</span>
+          <span>Cada dia indica com quem os filhos pernoitam.</span>
+        </div>
+        <div class="detalhe" id="detalhe">Toque em um dia para ver o motivo.</div>
+        <div class="meses" id="meses"></div>
+      </section>
+
+      <section id="painel-min" role="tabpanel" aria-labelledby="tab-min" hidden style="gap:12px">
+        <div class="minuta-acoes">
+          <p class="aviso">Minuta gerada como ponto de partida. Revise as cláusulas com o caso concreto antes de submetê-la à homologação judicial (art. 1.584, I, do Código Civil), com intervenção do Ministério Público.</p>
+          <div style="display:flex; gap:8px; align-items:center">
+            <span class="toast" id="toast" role="status"></span>
+            <button type="button" id="copiar">Copiar minuta</button>
+          </div>
+        </div>
+        <pre class="minuta" id="minuta"></pre>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="motor.js"></script>
+<script>
+(function () {
+  'use strict';
+  var M = window.GuardaMotor;
+  var $ = function (id) { return document.getElementById(id); };
+  var CAMPOS = ['a-nome', 'a-papel', 'b-nome', 'b-papel', 'a-nasc', 'b-nasc', 'criancas', 'cidade', 'residencia', 'regime', 'inicio', 'inicia',
+    'meio', 'troca', 'h-troca', 'h-retorno', 'natal', 'natal-par', 'carnaval', 'carnaval-par', 'pascoa', 'pascoa-par', 'maes', 'pais', 'aniv',
+    'ferias', 'f1-ini', 'f1-fim', 'f2-ini', 'f2-fim', 'ferias-par', 'canal', 'video', 'aviso-viagem', 'aviso-mudanca', 'alimentos',
+    'devedor', 'vencimento', 'valor'];
+  var CHAVE = 'guarda-compartilhada:v1';
+
+  var ano = new Date().getFullYear() + 1;
+  var diaSelecionado = null;
+
+  $('inicio').value = ano + '-01-04';
+
+  // Restaura o último preenchimento deste navegador, se houver.
+  try {
+    var salvo = JSON.parse(localStorage.getItem(CHAVE) || 'null');
+    if (salvo) {
+      CAMPOS.forEach(function (id) {
+        if (!(id in salvo)) return;
+        var el = $(id);
+        if (el.type === 'checkbox') el.checked = !!salvo[id]; else el.value = salvo[id];
+      });
+      if (salvo._ano) ano = salvo._ano;
+      $('selo-exemplo').hidden = true;
+    }
+  } catch (e) { /* armazenamento indisponível */ }
+
+  function salvar() {
+    try {
+      var dados = { _ano: ano };
+      CAMPOS.forEach(function (id) { var el = $(id); dados[id] = el.type === 'checkbox' ? el.checked : el.value; });
+      localStorage.setItem(CHAVE, JSON.stringify(dados));
+    } catch (e) { /* armazenamento indisponível */ }
+  }
+
+  function dataBRparaISO(s) {
+    var m = String(s).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!m) return '';
+    return m[3] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[1]).slice(-2);
+  }
+  function ddmmValido(s) { return /^\d{1,2}\/\d{1,2}$/.test(String(s).trim()); }
+
+  function lerConfig() {
+    var criancas = $('criancas').value.split('\n').map(function (l) {
+      var p = l.split(';');
+      return { nome: (p[0] || '').trim(), nascimento: dataBRparaISO(p[1] || '') };
+    }).filter(function (c) { return c.nome; });
+    var periodos = [];
+    if (ddmmValido($('f1-ini').value) && ddmmValido($('f1-fim').value)) periodos.push({ nome: 'férias de verão', inicio: $('f1-ini').value.trim(), fim: $('f1-fim').value.trim() });
+    if (ddmmValido($('f2-ini').value) && ddmmValido($('f2-fim').value)) periodos.push({ nome: 'férias de julho', inicio: $('f2-ini').value.trim(), fim: $('f2-fim').value.trim() });
+    return {
+      ano: ano,
+      genitores: {
+        A: { nome: $('a-nome').value.trim() || 'Genitor(a) A', papel: $('a-papel').value, nascimento: $('a-nasc').value },
+        B: { nome: $('b-nome').value.trim() || 'Genitor(a) B', papel: $('b-papel').value, nascimento: $('b-nasc').value }
+      },
+      criancas: criancas,
+      cidadeBase: $('cidade').value.trim(),
+      residenciaBase: $('residencia').value,
+      regime: $('regime').value,
+      dataInicio: $('inicio').value || (ano + '-01-01'),
+      iniciaCom: $('inicia').value,
+      pernoiteMeioSemana: $('meio').value === '' ? null : Number($('meio').value),
+      diaTroca: Number($('troca').value),
+      horarioTroca: $('h-troca').value.trim() || '18h',
+      horarioRetorno: $('h-retorno').value.trim() || '18h',
+      datas: {
+        natal: { ativo: $('natal').checked, anosPares: $('natal-par').value },
+        carnaval: { ativo: $('carnaval').checked, anosPares: $('carnaval-par').value },
+        pascoa: { ativo: $('pascoa').checked, anosPares: $('pascoa-par').value },
+        diaMaes: $('maes').checked,
+        diaPais: $('pais').checked,
+        aniversarioGenitores: $('aniv').checked
+      },
+      ferias: { ativo: $('ferias').checked, primeiraMetadeAnosPares: $('ferias-par').value, periodos: periodos },
+      comunicacao: { canal: $('canal').value.trim() || 'aplicativo de mensagens', videochamada: $('video').value.trim() || 'diariamente' },
+      avisoViagemDias: Number($('aviso-viagem').value) || 15,
+      avisoMudancaDias: Number($('aviso-mudanca').value) || 60,
+      alimentos: { ativo: $('alimentos').checked, devedor: $('devedor').value, valor: $('valor').value.trim(), vencimento: Number($('vencimento').value) || 10 }
+    };
+  }
+
+  function ajustarCampos(regime) {
+    var fds = regime === 'fins_de_semana_alternados';
+    $('lbl-meio').hidden = !fds;
+    $('lbl-inicia').hidden = fds;
+    $('lbl-troca').hidden = regime !== 'semanas_alternadas';
+  }
+
+  function numero(rot, val, extra) {
+    return '<div class="numero"><span class="rot">' + rot + '</span><span class="val">' + val + (extra ? ' <small>' + extra + '</small>' : '') + '</span></div>';
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function pct(x) { return x.toString().replace('.', ',') + '%'; }
+
+  var dias = [], cfgAtual = null;
+
+  function render() {
+    cfgAtual = lerConfig();
+    ajustarCampos(cfgAtual.regime);
+    var nA = cfgAtual.genitores.A.nome, nB = cfgAtual.genitores.B.nome;
+    $('ano').textContent = ano;
+    $('leg-a').textContent = nA;
+    $('leg-b').textContent = nB;
+
+    try {
+      dias = M.gerarCalendario(cfgAtual, ano);
+    } catch (e) {
+      $('meses').innerHTML = '<p>Não foi possível gerar o calendário: ' + esc(e.message) + '</p>';
+      return;
+    }
+    var st = M.estatisticas(dias);
+    $('barra-a').style.width = st.A.percentual + '%';
+    $('barra-b').style.width = st.B.percentual + '%';
+    $('numeros').innerHTML =
+      numero('<span class="cor-a">' + esc(nA) + '</span>', st.A.noites, 'noites · ' + pct(st.A.percentual)) +
+      numero('<span class="cor-b">' + esc(nB) + '</span>', st.B.noites, 'noites · ' + pct(st.B.percentual)) +
+      numero('Maior período sem ' + esc(nA.split(' ')[0]), st.A.maiorAfastamento, 'noites') +
+      numero('Maior período sem ' + esc(nB.split(' ')[0]), st.B.maiorAfastamento, 'noites') +
+      numero('Trocas no ano', st.trocas, '');
+
+    var html = '';
+    var cab = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(function (d) { return '<span class="cab">' + d + '</span>'; }).join('');
+    for (var m = 0; m < 12; m++) {
+      var doMes = dias.filter(function (d) { return Number(d.data.slice(5, 7)) === m + 1; });
+      var contA = doMes.filter(function (d) { return d.genitor === 'A'; }).length;
+      html += '<div class="mes"><h3>' + M.MESES[m] + '<small>' + contA + ' A · ' + (doMes.length - contA) + ' B</small></h3><div class="grade">' + cab;
+      for (var v = 0; v < doMes[0].diaSemana; v++) html += '<span></span>';
+      doMes.forEach(function (d) {
+        var i = dias.indexOf(d);
+        var cls = 'dia ' + d.genitor + (d.tipo !== 'base' ? ' especial' : '') +
+          (i > 0 && dias[i - 1].genitor !== d.genitor ? ' troca' : '') +
+          (d.marcadores.length ? ' aniv' : '') + (d.data === diaSelecionado ? ' sel' : '');
+        html += '<button type="button" class="' + cls + '" data-i="' + i + '" aria-label="' + esc(descrever(d)) + '">' + Number(d.data.slice(8)) + '</button>';
+      });
+      html += '</div></div>';
+    }
+    $('meses').innerHTML = html;
+    $('minuta').textContent = M.gerarMinuta(cfgAtual);
+    if (diaSelecionado) mostrarDetalhe(dias.find(function (d) { return d.data === diaSelecionado; }));
+  }
+
+  function descrever(d) {
+    var nome = cfgAtual.genitores[d.genitor].nome;
+    var dt = d.data.split('-').reverse().join('/');
+    var motivo = d.tipo === 'base' ? 'regime ordinário' : d.rotulo;
+    return M.DIAS_SEMANA[d.diaSemana] + ', ' + dt + ': pernoite com ' + nome + ' (' + motivo + ')' +
+      (d.marcadores.length ? '. ' + d.marcadores.join(', ') : '');
+  }
+
+  function mostrarDetalhe(d) {
+    if (!d) { $('detalhe').textContent = 'Toque em um dia para ver o motivo.'; return; }
+    var nome = cfgAtual.genitores[d.genitor].nome;
+    var dt = d.data.split('-').reverse().join('/');
+    $('detalhe').innerHTML = '<strong>' + M.DIAS_SEMANA[d.diaSemana] + ', ' + dt + '</strong>: pernoite com <span class="cor-' + d.genitor.toLowerCase() + '">' +
+      esc(nome) + '</span> · ' + esc(d.tipo === 'base' ? 'regime ordinário' : d.rotulo) +
+      (d.marcadores.length ? ' · ' + esc(d.marcadores.join(', ')) : '');
+  }
+
+  $('meses').addEventListener('click', function (ev) {
+    var b = ev.target.closest('.dia');
+    if (!b) return;
+    var d = dias[Number(b.dataset.i)];
+    var ant = document.querySelector('.dia.sel');
+    if (ant) ant.classList.remove('sel');
+    b.classList.add('sel');
+    diaSelecionado = d.data;
+    mostrarDetalhe(d);
+  });
+
+  $('form').addEventListener('input', function () { $('selo-exemplo').hidden = true; render(); salvar(); });
+  $('form').addEventListener('submit', function (ev) { ev.preventDefault(); });
+  $('ano-menos').addEventListener('click', function () { ano--; diaSelecionado = null; render(); salvar(); });
+  $('ano-mais').addEventListener('click', function () { ano++; diaSelecionado = null; render(); salvar(); });
+
+  function abrir(qual) {
+    var cal = qual === 'cal';
+    $('tab-cal').setAttribute('aria-selected', String(cal));
+    $('tab-min').setAttribute('aria-selected', String(!cal));
+    $('painel-cal').hidden = !cal;
+    $('painel-min').hidden = cal;
+    $('painel-min').style.display = cal ? '' : 'grid';
+  }
+  $('tab-cal').addEventListener('click', function () { abrir('cal'); });
+  $('tab-min').addEventListener('click', function () { abrir('min'); });
+  if (location.hash === '#minuta') abrir('min');
+
+  $('copiar').addEventListener('click', function () {
+    var texto = $('minuta').textContent;
+    function selecionar() {
+      var r = document.createRange(); r.selectNodeContents($('minuta'));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      $('toast').textContent = 'Texto selecionado. Use Ctrl+C para copiar.';
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(function () { $('toast').textContent = 'Minuta copiada.'; }, selecionar);
+    } else selecionar();
+  });
+
+  render();
+})();
+</script>
